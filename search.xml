@@ -4540,6 +4540,7 @@ Prototype &lt;|.. Realizetype</interface></pre>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Java中支持泛型机制。泛型的本质是参数化类型，即所操作的数据类型被指定为一个参数。</p>
 <p>泛型信息只存在于代码编译阶段，在Java的运行期（已经生成字节码文件后）会被擦除掉，专业术语叫做类型擦除。</p>
 <p>Java 泛型中的 <code>extends</code> 和 <code>super</code> 是用来限制泛型类型参数的上限和下限的关键字。</p>
+<p>原文地址：<a href="https://xuedongyun.cn/post/3373/">https://xuedongyun.cn/post/3373/</a></p>
 <h2 id="T的用法"><a href="#T的用法" class="headerlink" title="T的用法"></a>T的用法</h2><ul>
 <li>可以作用在类上</li>
 </ul>
@@ -4597,6 +4598,68 @@ Prototype &lt;|.. Realizetype</interface></pre>
 <li>经常往里插入的，适合用下界super</li>
 </ul>
 <h3 id="方便容器使用"><a href="#方便容器使用" class="headerlink" title="方便容器使用"></a>方便容器使用</h3><div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 只能往外读，读取类型为父类</span></span><br><span class="line">Plate&lt;? <span class="keyword">extends</span> <span class="title class_">Fruit</span>&gt; plate = <span class="keyword">new</span> <span class="title class_">Plate</span>&lt;Apple&gt;();</span><br><span class="line"><span class="type">Food</span> <span class="variable">item</span> <span class="operator">=</span> plate.getItem();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 只能往里存，存放类型为T的子类。读取只能读为Object</span></span><br><span class="line">Plate&lt;? <span class="built_in">super</span> Fruit&gt; plate = <span class="keyword">new</span> <span class="title class_">Plate</span>&lt;Food&gt;();</span><br><span class="line">plate.setItem(<span class="keyword">new</span> <span class="title class_">Fruit</span>());</span><br><span class="line">plate.setItem(<span class="keyword">new</span> <span class="title class_">Apple</span>());</span><br><span class="line"><span class="type">Object</span> <span class="variable">item</span> <span class="operator">=</span> plate.getItem();</span><br></pre></td></tr></table></figure></div>]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java中List.of与Arrays.asList的区别</title>
+    <url>//post/8447/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Java中List.of和Arrays.asList都可以用来快速创建一个List容器</p>
+<p>在Java中<code>List.of</code>和<code>Arrays.asList</code>都可以用来快速创建一个<code>List</code>容器</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 直接创建</span></span><br><span class="line">List&lt;Integer&gt; list1 = List.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">List&lt;Integer&gt; list2 = Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 从数组创建</span></span><br><span class="line">Integer[] ints = {<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>};</span><br><span class="line">List&lt;Integer&gt; list1 = List.of(ints);</span><br><span class="line">List&lt;Integer&gt; list2 = Arrays.asList(ints);</span><br></pre></td></tr></table></figure></div>
+
+<p>原文地址：<a href="https://xuedongyun.cn/post/8447/">https://xuedongyun.cn/post/8447/</a></p>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p><code>List.of</code>和<code>Arrays.asList</code>的区别在于：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>List.of</th>
+<th>Arrays.asList</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>能否包含null</td>
+<td>不可以</td>
+<td>可以</td>
+</tr>
+<tr>
+<td>能否修改</td>
+<td>不可以</td>
+<td>可以</td>
+</tr>
+<tr>
+<td>修改原数组是否影响List</td>
+<td>不影响</td>
+<td>影响</td>
+</tr>
+</tbody></table>
+<h2 id="List-of不能包含null的原因"><a href="#List-of不能包含null的原因" class="headerlink" title="List.of不能包含null的原因"></a>List.of不能包含null的原因</h2><ul>
+<li><code>List.of</code>源代码中明确有写，不能包含null</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SafeVarargs</span></span><br><span class="line"><span class="meta">@SuppressWarnings("varargs")</span></span><br><span class="line"><span class="keyword">static</span> &lt;E&gt; List&lt;E&gt; <span class="title function_">of</span><span class="params">(E... elements)</span> {</span><br><span class="line">    <span class="keyword">switch</span> (elements.length) { <span class="comment">// implicit null check of elements</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">            <span class="meta">@SuppressWarnings("unchecked")</span></span><br><span class="line">            <span class="type">var</span> <span class="variable">list</span> <span class="operator">=</span> (List&lt;E&gt;) ImmutableCollections.EMPTY_LIST;</span><br><span class="line">            <span class="keyword">return</span> list;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ImmutableCollections</span>.List12&lt;&gt;(elements[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ImmutableCollections</span>.List12&lt;&gt;(elements[<span class="number">0</span>], elements[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> ImmutableCollections.listFromArray(elements);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SafeVarargs</span></span><br><span class="line"><span class="keyword">static</span> &lt;E&gt; List&lt;E&gt; <span class="title function_">listFromArray</span><span class="params">(E... input)</span> {</span><br><span class="line">    </span><br><span class="line">    E[] tmp = (E[])<span class="keyword">new</span> <span class="title class_">Object</span>[input.length];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; input.length; i++) {</span><br><span class="line">        <span class="comment">// 元素不能为null，否则抛出错误</span></span><br><span class="line">        tmp[i] = Objects.requireNonNull(input[i]);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ListN</span>&lt;&gt;(tmp, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="List-of不能修改的原因"><a href="#List-of不能修改的原因" class="headerlink" title="List.of不能修改的原因"></a>List.of不能修改的原因</h2><div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 底层存储的数组用final修饰</span></span><br><span class="line"><span class="meta">@Stable</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> E[] elements;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="title function_">ListN</span><span class="params">(E[] elements, <span class="type">boolean</span> allowNulls)</span> {</span><br><span class="line">    <span class="built_in">this</span>.elements = elements;</span><br><span class="line">    <span class="built_in">this</span>.allowNulls = allowNulls;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="原数组是否影响List的原因"><a href="#原数组是否影响List的原因" class="headerlink" title="原数组是否影响List的原因"></a>原数组是否影响List的原因</h2><p>对<code>List.of</code>而言，底层创建了新的<code>new Object[]</code>，所以修改数组不影响<code>List</code></p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SafeVarargs</span></span><br><span class="line"><span class="keyword">static</span> &lt;E&gt; List&lt;E&gt; <span class="title function_">listFromArray</span><span class="params">(E... input)</span> {</span><br><span class="line">    <span class="comment">// 新建了数组，并复制了值</span></span><br><span class="line">    E[] tmp = (E[])<span class="keyword">new</span> <span class="title class_">Object</span>[input.length];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; input.length; i++) {</span><br><span class="line">        <span class="comment">// 元素不能为null，否则抛出错误</span></span><br><span class="line">        tmp[i] = Objects.requireNonNull(input[i]);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ListN</span>&lt;&gt;(tmp, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<p>对<code>Arrays.ofList</code>而言，直接使用了传入的数组作为底层存储，所以修改数组影响<code>List</code></p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; List&lt;T&gt; <span class="title function_">asList</span><span class="params">(T... a)</span> {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(a);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList(E[] array) {</span><br><span class="line">    a = Objects.requireNonNull(array);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 只要传入的数组不是null就行</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T <span class="title function_">requireNonNull</span><span class="params">(T obj)</span> {</span><br><span class="line">    <span class="keyword">if</span> (obj == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+]]></content>
       <categories>
         <category>java</category>
       </categories>
