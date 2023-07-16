@@ -4670,7 +4670,72 @@ Prototype &lt;|.. Realizetype</interface></pre>
   <entry>
     <title>Java中的IO流</title>
     <url>//post/17650/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>IO流是Java中有一个重要的概念，指的是数据从一个地点到另一个地点的过程。输入输出的介质有很多，包括：文件、网络、键盘（输入）、显示器（输出）……</p>
+<p>原文地址：<a href="https://xuedongyun.cn/post/17650/">https://xuedongyun.cn/post/17650/</a></p>
+<h2 id="IO分类"><a href="#IO分类" class="headerlink" title="IO分类"></a>IO分类</h2><p>Java对IO操作提供了相应的API，包含在<code>java.io</code>包中。java中对流的分类包括：</p>
+<ul>
+<li>按流向分（站在程序的角度）<ul>
+<li>输入流（Input）</li>
+<li>输出流（Output）</li>
+</ul>
+</li>
+<li>按流的处理类型分<ul>
+<li>字节流</li>
+<li>字符流</li>
+</ul>
+</li>
+<li>按流的功能来分<ul>
+<li>节点流（直接跟输入输出源交互）</li>
+<li>处理流（对其他流包装的流：包装流）</li>
+</ul>
+</li>
+</ul>
+<h2 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h2><p>Java中，几乎所有的流都是从以下四个父类继承而来的：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>输入流</th>
+<th>输出流</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>字节流</strong></td>
+<td>java.io.InputStream</td>
+<td>java.io.OutputStream</td>
+</tr>
+<tr>
+<td><strong>字符流</strong></td>
+<td>java.io.Reader</td>
+<td>java.io.Writer</td>
+</tr>
+</tbody></table>
+<h3 id="InputStream常用方法"><a href="#InputStream常用方法" class="headerlink" title="InputStream常用方法"></a>InputStream常用方法</h3><ul>
+<li><code>int available()</code>：获取流中可读字节数</li>
+<li><code>int read()</code>：从流中读取一个字节（0-255，-1表示已读到末尾）</li>
+<li><code>int read(byte[] b)</code>：将读取的字节存储到字节数组中，返回实际读到的长度（-1表示已读到末尾）</li>
+<li><code>skip(int b)</code>：跳过指定字节</li>
+</ul>
+<h2 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h2><p>计算机中，所有文件都是以字节的形式存储的。因此可以使用字节流进行读写操作。</p>
+<p>JDK对于字节输入提供了一些子类：</p>
+<ul>
+<li><code>FileInputStream</code></li>
+<li><code>ByteArrayInputStream</code></li>
+<li><code>BufferedInputStream</code></li>
+<li><code>ObjectInputStream</code></li>
+</ul>
+<h3 id="FileInputStream"><a href="#FileInputStream" class="headerlink" title="FileInputStream"></a>FileInputStream</h3><p><code>FileInputStream</code>是一个针对文件的输入字节流</p>
+<ul>
+<li>常见构造器<ul>
+<li><code>FileInputStream(File file)</code>:根据文件构建</li>
+<li><code>FileInputStream(String filePath)</code>：根据文件路径构建</li>
+</ul>
+</li>
+<li>读取文件</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">InputStream</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">"C:\\data\\Test.java"</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">byte</span>[] b = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>((len = in.read(b)) != -<span class="number">1</span>){</span><br><span class="line">    <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(b,<span class="number">0</span>,len);</span><br><span class="line">    System.out.println(str);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+]]></content>
       <categories>
         <category>java</category>
       </categories>
