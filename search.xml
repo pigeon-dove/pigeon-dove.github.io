@@ -4716,15 +4716,20 @@ Prototype &lt;|.. Realizetype</interface></pre>
 <li><code>int read(byte[] b)</code>：将读取的字节存储到字节数组中，返回实际读到的长度（-1表示已读到末尾）</li>
 <li><code>skip(int b)</code>：跳过指定字节</li>
 </ul>
+<h3 id="OutputStream常用方法"><a href="#OutputStream常用方法" class="headerlink" title="OutputStream常用方法"></a>OutputStream常用方法</h3><ul>
+<li><code>write(int b)</code>:将一个字节写出到目标源</li>
+<li><code>write(byte[] b)</code>：将一个字节数组写出到目标输</li>
+<li><code>write(byte[] b,int offset,int len)</code>将一个字节数组，从offset开始，写出len个字节，到目标输出源</li>
+</ul>
 <h2 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h2><p>计算机中，所有文件都是以字节的形式存储的。因此可以使用字节流进行读写操作。</p>
-<p>JDK对于字节输入提供了一些子类：</p>
+<h3 id="字节输入流"><a href="#字节输入流" class="headerlink" title="字节输入流"></a>字节输入流</h3><p>JDK对于字节输入提供了一些子类：</p>
 <ul>
 <li><code>FileInputStream</code></li>
 <li><code>ByteArrayInputStream</code></li>
 <li><code>BufferedInputStream</code></li>
 <li><code>ObjectInputStream</code></li>
 </ul>
-<h3 id="FileInputStream"><a href="#FileInputStream" class="headerlink" title="FileInputStream"></a>FileInputStream</h3><p><code>FileInputStream</code>是一个针对文件的输入字节流</p>
+<h4 id="FileInputStream"><a href="#FileInputStream" class="headerlink" title="FileInputStream"></a>FileInputStream</h4><p><code>FileInputStream</code>是一个针对文件的输入字节流</p>
 <ul>
 <li>常见构造器<ul>
 <li><code>FileInputStream(File file)</code>:根据文件构建</li>
@@ -4734,6 +4739,107 @@ Prototype &lt;|.. Realizetype</interface></pre>
 <li>读取文件</li>
 </ul>
 <div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">InputStream</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">"C:\\data\\Test.java"</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">byte</span>[] b = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>((len = in.read(b)) != -<span class="number">1</span>){</span><br><span class="line">    <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(b,<span class="number">0</span>,len);</span><br><span class="line">    System.out.println(str);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="字节输出流"><a href="#字节输出流" class="headerlink" title="字节输出流"></a>字节输出流</h3><p>JDK对于字节输出提供了一些子类：</p>
+<ul>
+<li><code>FileOutputStream</code></li>
+<li><code>ByteArrayOutputStream</code></li>
+<li><code>BufferedOutputStream</code></li>
+<li><code>ObjectOutputStream</code></li>
+</ul>
+<h4 id="FileOutputStream"><a href="#FileOutputStream" class="headerlink" title="FileOutputStream"></a>FileOutputStream</h4><p><code>FileOutputStream</code>主要用于对文件进行写入操作</p>
+<ul>
+<li>常用构造器<ul>
+<li><code>FileOutputStream(String filePath)</code>：基于一个标准文件的路径，创建对其操作的输出流</li>
+<li><code>FileOutputStream(String filePath,boolean append)</code>：同上，但使用追加模式</li>
+<li><code>FileOutputStream(File file)</code>：基于一个标准文件对象，创建对其操作的输出流</li>
+<li><code>FileOutputStream(File file,boolean append)</code>：同上，但使用追加模式</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>文件不存在会自动创建，文件存在会操作原有文件，目标不是文件而是目录会抛出异常</p>
+</blockquote>
+<ul>
+<li>写文件</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用了try...with...resource语法</span></span><br><span class="line"><span class="comment">// Java中文件相对路径是相对于项目目录而言的</span></span><br><span class="line"><span class="keyword">try</span> (<span class="type">FileOutputStream</span> <span class="variable">os</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">"test.txt"</span>, <span class="literal">true</span>)) {</span><br><span class="line">    os.write(<span class="string">"你好世界"</span>.getBytes());</span><br><span class="line">} <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h2><h3 id="字符输入流"><a href="#字符输入流" class="headerlink" title="字符输入流"></a>字符输入流</h3><p>字符输入流一般用于对文本数据进行读取操作，常见的子类：</p>
+<ul>
+<li><code>InputStreamReader</code></li>
+<li><code>FileReader</code></li>
+<li><code>BufferedReader</code></li>
+<li><code>CharArrayReader</code></li>
+</ul>
+<h4 id="FileReader"><a href="#FileReader" class="headerlink" title="FileReader"></a>FileReader</h4><p><code>FileReader</code>是一个以字符流的形式进行文件内容读取的流，从<code>InputStreamReader</code>继承而来</p>
+<ul>
+<li>常用构造方法<ul>
+<li><code>FileReader(File file)</code>：根据文件对象，获取字符输入流</li>
+<li><code>FileReader(String path)</code>：根据文件路径，获取字符输入流</li>
+</ul>
+</li>
+<li>具体使用</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(<span class="string">"C:\\data\\test.txt"</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">char</span>[] ch = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">100</span>];</span><br><span class="line"><span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>((len = fr.read(ch)) != -<span class="number">1</span>){</span><br><span class="line">    <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(ch, <span class="number">0</span>, len);</span><br><span class="line">    System.out.print(s);</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="字符输出流"><a href="#字符输出流" class="headerlink" title="字符输出流"></a>字符输出流</h3><p>字符输出流一般用于对文本数据进行写出操作，常见的子类：</p>
+<ul>
+<li><code>OutputStreamWriter</code></li>
+<li><code>BufferedWriter</code></li>
+<li><code>CharArrayWriter</code></li>
+<li><code>FileWriter</code></li>
+<li><code>PrintWriter</code></li>
+</ul>
+<h4 id="FileWriter"><a href="#FileWriter" class="headerlink" title="FileWriter"></a>FileWriter</h4><p>FileWriter是一个以字符流的形式进行文件内容写出的流，从<code>OutputStreamWriter</code>继承而来</p>
+<ul>
+<li><p>常用构造方法</p>
+<ul>
+<li><p><code>FileWriter(File file)</code>：根据文件对象，获取字符输出流</p>
+</li>
+<li><p><code>FileWriter(File file, boolean append)</code>：同上，但使用追加模式</p>
+</li>
+<li><p><code>FileWriter(String path)</code>：根据文件路径，获取字符输出流</p>
+</li>
+<li><p><code>FileWriter(String path, boolean append)</code>：同上，但使用追加模式</p>
+</li>
+</ul>
+</li>
+<li><p>具体使用</p>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">FileWriter</span> <span class="variable">fw</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">"readme.txt"</span>);</span><br><span class="line">fw.write(<span class="string">"你好世界"</span>);</span><br><span class="line">fw.flush(); <span class="comment">//允许在流未关闭之前，强制将字符缓冲区中的数据写出到目标输出源</span></span><br><span class="line">fw.write(<span class="string">"abcdefg"</span>);</span><br><span class="line">fw.close();</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="处理流"><a href="#处理流" class="headerlink" title="处理流"></a>处理流</h2><p>按流的功能来分类，可以分为：</p>
+<ul>
+<li>节点流<ul>
+<li>又称低级流。直接跟输入输出源沟通</li>
+</ul>
+</li>
+<li>处理流<ul>
+<li>又称高级流或包装流。可以对其他流进行包装，以实现流的<strong>类型转换</strong>或效率的提升。</li>
+<li>由<strong>缓冲流</strong>和<strong>转换流</strong>构成</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>包装使用了23种设计模式中的：装饰器模式</p>
+</blockquote>
+<h3 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h3><p>缓冲流是一种自带缓冲区的流，主要有四种</p>
+<ul>
+<li><code>BufferedInputStream</code>：字节缓冲输入流</li>
+<li><code>BufferedOutputStream</code>：字节缓冲输出流</li>
+<li><code>BufferedReader</code>：字符缓冲输入流</li>
+<li><code>BufferedWriter</code>：字符缓冲输出流</li>
+</ul>
+<blockquote>
+<p>缓冲流内部使用了一个默认大小为<code>8kb</code>的字节缓冲区，每次将缓冲区的空间存满之后再将数据通过流对象完成读写操作</p>
+</blockquote>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">FileInputStream</span> <span class="variable">fis</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">"test.txt"</span>);</span><br><span class="line"><span class="type">BufferedInputStream</span> <span class="variable">bis</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedInputStream</span>(fis);</span><br><span class="line"></span><br><span class="line"><span class="type">byte</span>[] b = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">8</span>];</span><br><span class="line"><span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>((len = bis.read(b)) != -<span class="number">1</span>){</span><br><span class="line">    <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(b, <span class="number">0</span>, len);</span><br><span class="line">    System.out.println(s);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">bis.close();</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="转换流"><a href="#转换流" class="headerlink" title="转换流"></a>转换流</h3><p>一些需求：</p>
+<p>字节流转换为字符流、字符流转换为字节流……</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> System.in;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字节流转换为字符流</span></span><br><span class="line"><span class="type">InputStreamReader</span> <span class="variable">isr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(is);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符流包装为缓冲流</span></span><br><span class="line"><span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(isr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取一行</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> br.readLine();</span><br></pre></td></tr></table></figure></div>
 
 ]]></content>
       <categories>
