@@ -7328,4 +7328,78 @@ Prototype &lt;|.. Realizetype</interface></pre>
         <category>RabbitMQ</category>
       </categories>
   </entry>
+  <entry>
+    <title>Java设计模式系列（6）：适配器模式</title>
+    <url>//post/26888/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><img lazyload="" src="/images/loading.svg" data-src="https://s2.loli.net/2023/09/07/z1SbZwLJWlPBIX2.png" alt="img"></p>
+<p>将一个类的接口，替换成客户端希望的另外一个接口，使原本因接口不兼容的类能一起工作，这就是适配器模式。</p>
+<p>原文地址：<a href="https://xuedongyun.cn/post/26888/">https://xuedongyun.cn/post/26888/</a></p>
+<h2 id="适配器模式的角色"><a href="#适配器模式的角色" class="headerlink" title="适配器模式的角色"></a>适配器模式的角色</h2><p>适配器模式（Adapter）包含以下主要角色</p>
+<ul>
+<li>目标（Target）接口：当前业务所期待的接口</li>
+<li>适配者（Adapter）类：当前组件的接口</li>
+<li>适配器（Adapter）类：一个转换器，把适配者接口，转化为目标接口</li>
+</ul>
+<h2 id="类适配器模式"><a href="#类适配器模式" class="headerlink" title="类适配器模式"></a>类适配器模式</h2><p>实现方法：定义一个适配器类来<strong>实现当前业务接口</strong>，同时又<strong>继承原有组件</strong></p>
+<ul>
+<li>假如我们的电脑只能读取SD卡，读取TF卡就需要适配器模式</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Computer</span> {</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">readSD</span><span class="params">(SDCard sdCard)</span> {</span><br><span class="line">        <span class="keyword">if</span>(sdCard == <span class="literal">null</span>) {</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>(<span class="string">"sd card null"</span>);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> sdCard.readSD();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>SD卡的接口</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">SDCard</span> {</span><br><span class="line">    String <span class="title function_">readSD</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">writeSD</span><span class="params">(String msg)</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// SD卡实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SDCardImpl</span> <span class="keyword">implements</span> <span class="title class_">SDCard</span> {</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">readSD</span><span class="params">()</span> {</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> <span class="string">"sd card read a msg :hello word SD"</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeSD</span><span class="params">(String msg)</span> {</span><br><span class="line">        System.out.println(<span class="string">"sd card write msg : "</span> + msg);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>TF卡的接口</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">TFCard</span> {</span><br><span class="line">    String <span class="title function_">readTF</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">writeTF</span><span class="params">(String msg)</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//TF卡实现类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TFCardImpl</span> <span class="keyword">implements</span> <span class="title class_">TFCard</span> {</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">readTF</span><span class="params">()</span> {</span><br><span class="line">        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span><span class="string">"tf card read msg : hello word tf card"</span>;</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeTF</span><span class="params">(String msg)</span> {</span><br><span class="line">        System.out.println(<span class="string">"tf card write a msg : "</span> + msg);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>定义适配器类</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定义适配器类（用SD兼容TF）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SDAdapterTF</span> <span class="keyword">extends</span> <span class="title class_">TFCardImpl</span> <span class="keyword">implements</span> <span class="title class_">SDCard</span> {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">readSD</span><span class="params">()</span> {</span><br><span class="line">        System.out.println(<span class="string">"adapter read tf card "</span>);</span><br><span class="line">        <span class="keyword">return</span> readTF();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeSD</span><span class="params">(String msg)</span> {</span><br><span class="line">        System.out.println(<span class="string">"adapter write tf card"</span>);</span><br><span class="line">        writeTF(msg);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>使用</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">SDAdapterTF</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SDAdapterTF</span>();</span><br><span class="line">computer.readSD(adapter);</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="对象适配器模式"><a href="#对象适配器模式" class="headerlink" title="对象适配器模式"></a>对象适配器模式</h2><p>实现方式：该类实现当前业务接口，同时将现有组件引入适配器类中</p>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//创建适配器对象（SD兼容TF）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SDAdapterTF</span> <span class="keyword">implements</span> <span class="title class_">SDCard</span> {</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> TFCard tfCard;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SDAdapterTF</span><span class="params">(TFCard tfCard)</span> {</span><br><span class="line">        <span class="built_in">this</span>.tfCard = tfCard;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">readSD</span><span class="params">()</span> {</span><br><span class="line">        System.out.println(<span class="string">"adapter read tf card "</span>);</span><br><span class="line">        <span class="keyword">return</span> tfCard.readTF();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeSD</span><span class="params">(String msg)</span> {</span><br><span class="line">        System.out.println(<span class="string">"adapter write tf card"</span>);</span><br><span class="line">        tfCard.writeTF(msg);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ol>
+<li>以前的组件满足功能需求，但是接口定义不一致</li>
+<li>第三方开发的组件，接口定义不一致</li>
+</ol>
+<h2 id="JDK源码-InputStreamReader"><a href="#JDK源码-InputStreamReader" class="headerlink" title="JDK源码-InputStreamReader"></a>JDK源码-InputStreamReader</h2><p>在JDK中，使用InputStreamReader，进行从InputStream（字节流）到Reader（字符流）的转换。</p>
+<ul>
+<li>InputStreamReader继承了抽象类Reader</li>
+<li>InputStreamReader内部使用了StreamDecoder来执行实际的功能（抽象类Reader的具体实现）<ul>
+<li>不是Java SE API中的内容，是Sun JDK给出的实现</li>
+<li>对构造方法中的字节流类（InputStream）进行封装，并通过该类进行了字节流和字符流之间的解码转换</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InputStreamReader</span> <span class="keyword">extends</span> <span class="title class_">Reader</span> {</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> StreamDecoder sd;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">read</span><span class="params">()</span> <span class="keyword">throws</span> IOException {</span><br><span class="line">        <span class="keyword">return</span> sd.read();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">read</span><span class="params">(<span class="type">char</span>[] cbuf, <span class="type">int</span> off, <span class="type">int</span> len)</span> <span class="keyword">throws</span> IOException {</span><br><span class="line">        <span class="keyword">return</span> sd.read(cbuf, off, len);</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<img lazyload="" src="/images/loading.svg" data-src="https://s2.loli.net/2023/09/07/pwCELd39fQ2Yxql.png" alt="img" style="zoom: 80%;">
+
+<blockquote>
+<p>结论：</p>
+<ul>
+<li>表层来看，InputStreamReader做了InputStream（字节流）到Reader（字符流）之间的转换</li>
+<li>实际上，是StreamDecoder的设计实现，采用了适配器模式</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>java</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>java设计模式系列</tag>
+      </tags>
+  </entry>
 </search>
